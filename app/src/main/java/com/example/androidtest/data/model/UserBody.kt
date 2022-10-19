@@ -1,5 +1,7 @@
 package com.example.androidtest.data.model
 
+import com.example.androidtest.ui.model.UserUiModel
+
 data class UserBody(
     val id: Long,
     val guid: String,
@@ -25,3 +27,13 @@ data class UserBody(
 data class Friends(
     val id: Long
 )
+
+fun UserBody.toUiModel(): UserUiModel {
+    return UserUiModel(
+        this.id,
+        this.guid,
+        this.name,
+        this.email,
+        this.isActive
+    )
+}
