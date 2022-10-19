@@ -16,8 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.androidtest.di.component.DaggerUserListScreenViewModelComponent
 import com.example.androidtest.di.component.UserListScreenViewModelComponent
 import com.example.androidtest.di.utils.GenericSavedStateViewModelFactory
+import com.example.androidtest.ui.screen.userDetailsScreen.UserDetailsScreen
 import com.example.androidtest.ui.screen.userListScreen.UserListScreen
 import com.example.androidtest.ui.theme.AndroidTestTheme
+import com.example.androidtest.ui.viewModel.UserDetailsScreenViewModel
 import com.example.androidtest.ui.viewModel.UserListScreenViewModel
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +54,15 @@ fun ConfigureMainScreen(modifier: Modifier = Modifier) {
                 ).create(UserListScreenViewModel::class.java)
             }
 
-            UserListScreen(modifier = modifier, vm = vm)
+            UserListScreen(modifier = modifier, vm = vm, navController = navController)
+        }
+
+        composable("userDetailsScreen") {
+            val vm: UserDetailsScreenViewModel = viewModel {
+                UserDetailsScreenViewModel()
+            }
+
+            UserDetailsScreen(modifier = modifier, vm = vm)
         }
     }
 }

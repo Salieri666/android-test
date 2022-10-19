@@ -17,7 +17,15 @@ import com.example.androidtest.ui.model.UserUiModel
 @Composable
 fun PreviewUserItemComponent() {
 
-    val item = UserUiModel(1, "1", "Test_name", "test@email.com", true)
+    val item =  UserUiModel(
+        1, "1", "Test_name", "test@email.com", true,
+        23, "Company_name", "+11111",
+        "test_address", "about", "blue",
+        "apple",
+        "2022",
+        emptyList(),
+        "Coordinates_22"
+    )
 
     UserItemComponent(user = item)
 }
@@ -36,7 +44,7 @@ fun UserItemComponent(
     ) {
         Box(
             modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(horizontal = 10.dp, vertical = 8.dp)
                 .fillMaxWidth()
         ) {
             Row(

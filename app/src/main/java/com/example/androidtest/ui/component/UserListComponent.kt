@@ -13,7 +13,15 @@ import com.example.androidtest.ui.model.UserUiModel
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserListComponent() {
-    val item = UserUiModel(1, "1", "Test_name", "test@email.com", true)
+    val item =  UserUiModel(
+        1, "1", "Test_name", "test@email.com", true,
+        23, "Company_name", "+11111",
+        "test_address", "about", "blue",
+        "apple",
+        "2022",
+        emptyList(),
+        "Coordinates_22"
+    )
     val list = List(5) {item}
 
     UserListComponent(userList = list)
