@@ -1,6 +1,5 @@
 package com.example.androidtest.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -37,7 +36,6 @@ fun UserItemComponent(
     ) {
         Box(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 8.dp, vertical = 4.dp)
                 .fillMaxWidth()
         ) {

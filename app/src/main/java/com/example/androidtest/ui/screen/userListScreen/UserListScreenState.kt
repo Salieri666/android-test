@@ -8,7 +8,7 @@ sealed class UserListScreenState {
     ) : UserListScreenState()
 
     data class Error(
-        val exception: Exception
+        val throwable: Throwable
     ) : UserListScreenState()
 
     object Loading : UserListScreenState()

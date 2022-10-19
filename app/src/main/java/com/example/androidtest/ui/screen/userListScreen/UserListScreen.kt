@@ -2,11 +2,14 @@ package com.example.androidtest.ui.screen.userListScreen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androidtest.ui.component.MessageComponent
 import com.example.androidtest.ui.component.UserListComponent
 import com.example.androidtest.ui.model.UserUiModel
+import com.example.androidtest.ui.viewModel.UserListScreenViewModel
 
 
 @Preview(showBackground = true)
@@ -25,6 +28,16 @@ fun PreviewUserListScreenLoading() {
     val state = UserListScreenState.Loading
 
     UserListScreen(state = state, modifier = Modifier.fillMaxSize())
+}
+
+@Composable
+fun UserListScreen(
+    modifier: Modifier = Modifier,
+    vm: UserListScreenViewModel
+) {
+    val state by vm.state.collectAsState()
+
+    UserListScreen(state = state, modifier = modifier, onClick = {})
 }
 
 
