@@ -122,15 +122,3 @@ fun ConfigureNavHost(
         }
     }
 }
-
-
-
-
-
-/*@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AndroidTestTheme {
-        ConfigureMainScreen()
-    }
-}*/

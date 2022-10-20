@@ -10,22 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androidtest.ui.model.UserUiModel
+import com.example.androidtest.ui.utils.getUserUiModelList
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserListComponent() {
-    val item = UserUiModel(
-        1, 2, "1", "Test_name", "test@email.com", true,
-        23, "Company_name", "+11111",
-        "test_address", "about", "blue",
-        "apple",
-        "2022",
-        emptyList(),
-        "Coordinates_22", 0.0,0.0
-    )
-    val list = List(1) { item }
-
-    UserListComponent(userList = list, modifier = Modifier.fillMaxSize())
+    UserListComponent(userList = getUserUiModelList(1), modifier = Modifier.fillMaxSize())
 }
 
 

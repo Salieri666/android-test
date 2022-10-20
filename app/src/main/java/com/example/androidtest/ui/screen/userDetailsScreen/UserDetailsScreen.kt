@@ -26,25 +26,14 @@ import com.example.androidtest.ui.component.UserDetailsComponent
 import com.example.androidtest.ui.component.UserItemComponent
 import com.example.androidtest.ui.model.UserUiModel
 import com.example.androidtest.ui.navigation.MainNavigation
+import com.example.androidtest.ui.utils.getUserUiModel
 import com.example.androidtest.ui.viewModel.UserDetailsScreenViewModel
 
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserListScreen() {
-    val item = UserUiModel(
-        1, 2, "1", "Test_name", "test@email.com", true,
-        23, "Company_name", "+11111",
-        "test_address", "about", "blue",
-        "apple",
-        "2022",
-        emptyList(),
-        "Coordinates_22", 0.0, 0.0
-    )
-    val list = List(1) { item }
-
-    val user = item.copy(friends = list)
-    val state = UserDetailsScreenState.Success(user)
+    val state = UserDetailsScreenState.Success(getUserUiModel(1))
 
     UserDetailsScreen(state = state, modifier = Modifier.fillMaxSize())
 }

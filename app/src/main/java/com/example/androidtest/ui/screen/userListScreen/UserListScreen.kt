@@ -18,23 +18,14 @@ import com.example.androidtest.R
 import com.example.androidtest.ui.component.MessageComponent
 import com.example.androidtest.ui.component.UserListComponent
 import com.example.androidtest.ui.model.UserUiModel
+import com.example.androidtest.ui.utils.getUserUiModelList
 import com.example.androidtest.ui.viewModel.UserListScreenViewModel
 
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserListScreen() {
-    val item = UserUiModel(
-        1, 0, "1", "Test_name", "test@email.com", true,
-        23, "Company_name", "+11111",
-        "test_address", "about", "blue",
-        "apple",
-        "2022",
-        emptyList(),
-        "Coordinates_22", 0.0, 0.0
-    )
-    val list = List(1) { item }
-    val state = UserListScreenState.Success(list)
+    val state = UserListScreenState.Success(getUserUiModelList(5))
 
     UserListScreen(state = state, modifier = Modifier.fillMaxSize())
 }
