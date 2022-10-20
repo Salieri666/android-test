@@ -13,23 +13,31 @@ class UserListScreenViewModel(
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    private val _state = MutableStateFlow<UserListScreenState>(
-        UserListScreenState.Default
+    private val _state = MutableStateFlow(
+        savedStateHandle.get<UserListScreenState>("state") ?: UserListScreenState.Default
     )
     val state: StateFlow<UserListScreenState> = _state.asStateFlow()
 
     init {
-        userListUseCase.getUserList()
-            .onStart {
-                _state.value = UserListScreenState.Loading
-            }
-            .onEach {
-                _state.value = UserListScreenState.Success(it)
-            }
-            .catch { cause ->
-                _state.value = UserListScreenState.Error(cause)
-            }
-            .launchIn(viewModelScope)
+
+        if (_state.value is UserListScreenState.Default) {
+            userListUseCase.getUserList()
+                .onStart {
+                    setState(UserListScreenState.Loading)
+                }
+                .onEach {
+                    setState(UserListScreenState.Success(it))
+                }
+                .catch { cause ->
+                    setState(UserListScreenState.Error(cause))
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun setState(state: UserListScreenState) {
+        savedStateHandle["state"] = state
+        _state.value = state
     }
 
 }

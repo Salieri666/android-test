@@ -1,9 +1,8 @@
 package com.example.androidtest.ui.screen.userDetailsScreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +35,7 @@ fun PreviewUserListScreen() {
         emptyList(),
         "Coordinates_22"
     )
-    val list = List(5) {item}
+    val list = List(1) {item}
 
     val user = item.copy(friends = list)
     val state = UserDetailsScreenState.Success(user)
@@ -54,6 +53,7 @@ fun UserDetailsScreen(
     UserDetailsScreen(modifier = modifier, state = state)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserDetailsScreen(
     modifier: Modifier = Modifier,
@@ -62,27 +62,40 @@ fun UserDetailsScreen(
 
     when(state) {
         is UserDetailsScreenState.Success -> {
-            LazyColumn(modifier = modifier) {
-                item {
-                    UserDetailsComponent(user = state.user)
-                }
+            BoxWithConstraints {
 
-                item {
-                    Box(modifier = Modifier
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(20.dp)
+                LazyColumn(modifier = modifier) {
+                    item {
+                        UserDetailsComponent(user = state.user)
+                    }
 
-                    ) {
-                        Text(text = "Friends", style = TextStyle(
-                                fontSize = 20.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                    stickyHeader {
+                        Box(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(20.dp)
+                                .fillMaxWidth()
+
+                        ) {
+                            Text(
+                                text = "Friends", style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            )
+                        }
+                    }
+
+
+                    items(state.user.friends) {
+                        UserItemComponent(user = it, modifier = Modifier
+                            .padding(bottom = 8.dp, start = 4.dp, end = 4.dp)
                         )
                     }
-                }
 
-                items(state.user.friends) {
-                    UserItemComponent(user = it)
+                    item {
+                        Spacer(modifier = Modifier.padding(20.dp))
+                    }
                 }
             }
         }

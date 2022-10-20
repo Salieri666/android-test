@@ -1,6 +1,8 @@
 package com.example.androidtest.ui.viewModel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.example.androidtest.domain.useCase.UserListUseCase
 import com.example.androidtest.ui.model.UserUiModel
 import com.example.androidtest.ui.screen.userDetailsScreen.UserDetailsScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,8 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 
 class UserDetailsScreenViewModel(
-    //private val userListUseCase: UserListUseCase,
-    //private val savedStateHandle: SavedStateHandle
+    private val userListUseCase: UserListUseCase,
+    private val savedStateHandle: SavedStateHandle,
+    private val userId: Long?
 ): ViewModel() {
 
     private val _state = MutableStateFlow<UserDetailsScreenState>(
@@ -28,7 +31,7 @@ class UserDetailsScreenViewModel(
             emptyList(),
             "Coordinates_22"
         )
-        val list = List(5) {item}
+        val list = List(23) {item}
 
         val user = item.copy(friends = list)
         val state = UserDetailsScreenState.Success(user)

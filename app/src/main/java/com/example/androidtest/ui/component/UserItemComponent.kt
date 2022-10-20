@@ -1,10 +1,12 @@
 package com.example.androidtest.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +46,8 @@ fun UserItemComponent(
     ) {
         Box(
             modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 8.dp)
+                .background(Color.White)
+                .padding(horizontal = 10.dp, vertical = 10.dp)
                 .fillMaxWidth()
         ) {
             Row(
@@ -78,8 +81,7 @@ fun UserItemComponent(
                     text = if (user.isActive) "active" else "disable",
                     style = TextStyle(
                         fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        //color = if (user.isActive) Color.Green else Color.Red
+                        fontWeight = FontWeight.Medium
                     )
                 )
             }

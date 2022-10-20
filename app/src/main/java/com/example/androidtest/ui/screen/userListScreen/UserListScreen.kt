@@ -52,7 +52,7 @@ fun UserListScreen(
 
     UserListScreen(state = state, modifier = modifier, onClick = {
         if (it.isActive) {
-            navController.navigate("userDetailsScreen")
+            navController.navigate("userDetailsScreen/${it.id}")
         } else {
             Toast.makeText(context, "User is disabled", Toast.LENGTH_SHORT).show()
         }

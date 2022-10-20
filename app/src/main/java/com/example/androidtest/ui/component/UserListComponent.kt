@@ -38,7 +38,11 @@ fun UserListComponent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(4.dp)
     ) {
-        items(userList) {
+        items(userList,
+            /*key = {
+                it.id
+            }*/
+        ) {
 
             UserItemComponent(user = it, onClick = { onClick(it) })
 

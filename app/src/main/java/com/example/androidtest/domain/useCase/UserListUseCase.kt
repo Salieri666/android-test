@@ -1,5 +1,6 @@
 package com.example.androidtest.domain.useCase
 
+import android.content.Context
 import android.location.Location
 import com.example.androidtest.data.model.UserBody
 import com.example.androidtest.data.repo.UserRepo
@@ -13,7 +14,8 @@ import kotlin.math.absoluteValue
 
 @Singleton
 class UserListUseCase @Inject constructor(
-    private val userRepo: UserRepo
+    private val userRepo: UserRepo,
+    private val context: Context
 ) {
 
     fun getUserList(): Flow<List<UserUiModel>> = flow {

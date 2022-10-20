@@ -1,8 +1,11 @@
 package com.example.androidtest.ui.model
 
+import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import com.example.androidtest.R
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UserUiModel(
     val id: Long,
     val guid: String,
@@ -19,7 +22,7 @@ data class UserUiModel(
     val registered: String,
     val friends: List<UserUiModel>,
     val coordinates: String
-)
+) : Parcelable
 
 fun UserUiModel.getColorByEye(): Color {
     return when (this.eyeColor) {

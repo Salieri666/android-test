@@ -1,5 +1,6 @@
 package com.example.androidtest.di.module
 
+import android.content.Context
 import com.example.androidtest.data.api.UserApi
 import dagger.Module
 import dagger.Provides
@@ -9,12 +10,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@Module()
+@Module(includes = [AppModule::class])
 class NetworkModule {
     @Provides
     @Singleton
     fun provideClient(
-        //applicationContext: Context
+        applicationContext: Context
     ) : OkHttpClient {
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
