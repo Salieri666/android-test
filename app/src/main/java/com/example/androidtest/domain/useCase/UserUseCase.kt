@@ -3,11 +3,12 @@ package com.example.androidtest.domain.useCase
 import android.content.Context
 import com.example.androidtest.data.repo.UserRepo
 import com.example.androidtest.data.room.entity.UserCacheEntity
+import com.example.androidtest.di.module.IoDispatcher
 import com.example.androidtest.domain.exception.NetworkConnectionException
 import com.example.androidtest.domain.utils.ConnectHelper
 import com.example.androidtest.domain.utils.LocationConverter
 import com.example.androidtest.ui.model.UserUiModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -23,7 +24,8 @@ import javax.inject.Singleton
 class UserUseCase @Inject constructor(
     private val userRepo: UserRepo,
     private val connectHelper: ConnectHelper,
-    private val context: Context
+    private val context: Context,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
     companion object {
@@ -45,10 +47,10 @@ class UserUseCase @Inject constructor(
     }
         .map { list ->
             list.map { toUiModel(it) }
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
 
 
-    suspend fun getUserDetails(userId: Long): UserUiModel = withContext(Dispatchers.IO) {
+    suspend fun getUserDetails(userId: Long): UserUiModel = withContext(ioDispatcher) {
         val user = userRepo.getUserById(userId)
         val userFriends = userRepo.getUserFriendsByOuterId(user.outerId).map { toUiModel(it) }
 

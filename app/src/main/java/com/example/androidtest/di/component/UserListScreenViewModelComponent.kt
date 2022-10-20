@@ -2,6 +2,7 @@ package com.example.androidtest.di.component
 
 import androidx.lifecycle.SavedStateHandle
 import com.example.androidtest.di.module.DatabaseModule
+import com.example.androidtest.di.module.DispatcherModule
 import com.example.androidtest.di.module.NetworkModule
 import com.example.androidtest.di.utils.ViewModelAssistedFactory
 import com.example.androidtest.domain.useCase.UserUseCase
@@ -11,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [NetworkModule::class, DatabaseModule::class])
+@Component(modules = [NetworkModule::class, DatabaseModule::class, DispatcherModule::class])
 interface UserListScreenViewModelComponent {
 
     fun getUserListScreenViewModelFactory() : UserListScreenViewModelFactory

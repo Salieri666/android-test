@@ -7,7 +7,8 @@ import com.example.androidtest.data.room.dao.UserCacheDao
 import com.example.androidtest.data.room.dao.UserFriendsCacheDao
 import com.example.androidtest.data.room.entity.UserCacheEntity
 import com.example.androidtest.data.room.entity.UserFriendsCacheEntity
-import kotlinx.coroutines.Dispatchers
+import com.example.androidtest.di.module.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,19 +17,20 @@ import javax.inject.Singleton
 class UserRepo @Inject constructor(
     private val userApi: UserApi,
     private val userCacheDao: UserCacheDao,
-    private val userFriendsCacheDao: UserFriendsCacheDao
+    private val userFriendsCacheDao: UserFriendsCacheDao,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun getUserListFromApi() : List<UserBody> = withContext(Dispatchers.IO) {
+    suspend fun getUserListFromApi() : List<UserBody> = withContext(ioDispatcher) {
         return@withContext userApi.getUsers(alt = "media", token = "e3672c23-b1a5-4ca7-bb77-b6580d75810c")
     }
 
-    suspend fun getUserListFromCache() : List<UserCacheEntity> = withContext(Dispatchers.IO) {
+    suspend fun getUserListFromCache() : List<UserCacheEntity> = withContext(ioDispatcher) {
         return@withContext userCacheDao.getAll()
     }
 
     @Transaction
-    suspend fun updateCache(users: List<UserBody>) = withContext(Dispatchers.IO) {
+    suspend fun updateCache(users: List<UserBody>) = withContext(ioDispatcher) {
         val userEntityList = ArrayList<UserCacheEntity>()
         val userFriendsEntityList = ArrayList<UserFriendsCacheEntity>()
 
@@ -50,11 +52,11 @@ class UserRepo @Inject constructor(
         userFriendsCacheDao.updateCache(userFriendsEntityList)
     }
 
-    suspend fun getUserById(userId: Long): UserCacheEntity = withContext(Dispatchers.IO) {
+    suspend fun getUserById(userId: Long): UserCacheEntity = withContext(ioDispatcher) {
         return@withContext userCacheDao.getUserById(userId)
     }
 
-    suspend fun getUserFriendsByOuterId(outerId: Long): List<UserCacheEntity> = withContext(Dispatchers.IO) {
+    suspend fun getUserFriendsByOuterId(outerId: Long): List<UserCacheEntity> = withContext(ioDispatcher) {
         return@withContext userCacheDao.getUserFriendsById(outerId)
     }
 
