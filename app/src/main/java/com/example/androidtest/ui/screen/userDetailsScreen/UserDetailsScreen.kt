@@ -1,5 +1,6 @@
 package com.example.androidtest.ui.screen.userDetailsScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,11 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.androidtest.ui.component.MessageComponent
 import com.example.androidtest.ui.component.UserDetailsComponent
 import com.example.androidtest.ui.component.UserItemComponent
@@ -27,7 +30,7 @@ import com.example.androidtest.ui.viewModel.UserDetailsScreenViewModel
 @Composable
 fun PreviewUserListScreen() {
     val item =  UserUiModel(
-        1, "1", "Test_name", "test@email.com", true,
+        1, 2,"1", "Test_name", "test@email.com", true,
         23, "Company_name", "+11111",
         "test_address", "about", "blue",
         "apple",
@@ -45,19 +48,28 @@ fun PreviewUserListScreen() {
 
 @Composable
 fun UserDetailsScreen(
+    navController: NavController,
     modifier: Modifier = Modifier,
     vm: UserDetailsScreenViewModel
 ) {
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
 
-    UserDetailsScreen(modifier = modifier, state = state)
+    UserDetailsScreen(modifier = modifier, state = state, friendsOnClick = { friend ->
+        if (friend.isActive) {
+            navController.navigate("userDetailsScreen/${friend.id}")
+        } else {
+            Toast.makeText(context, "User is disabled", Toast.LENGTH_SHORT).show()
+        }
+    })
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserDetailsScreen(
     modifier: Modifier = Modifier,
-    state: UserDetailsScreenState
+    state: UserDetailsScreenState,
+    friendsOnClick: (UserUiModel) -> Unit = {}
 ) {
 
     when(state) {
@@ -87,9 +99,13 @@ fun UserDetailsScreen(
                     }
 
 
-                    items(state.user.friends) {
+                    items(state.user.friends,
+                        key = {
+                            it.id
+                        }) {
                         UserItemComponent(user = it, modifier = Modifier
-                            .padding(bottom = 8.dp, start = 4.dp, end = 4.dp)
+                            .padding(bottom = 8.dp, start = 4.dp, end = 4.dp),
+                            onClick = { friendsOnClick(it) }
                         )
                     }
 

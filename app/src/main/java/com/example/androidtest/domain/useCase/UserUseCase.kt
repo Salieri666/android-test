@@ -1,0 +1,96 @@
+package com.example.androidtest.domain.useCase
+
+import android.content.Context
+import com.example.androidtest.data.repo.UserRepo
+import com.example.androidtest.data.room.entity.UserCacheEntity
+import com.example.androidtest.domain.utils.LocationConverter
+import com.example.androidtest.ui.model.UserUiModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class UserUseCase @Inject constructor(
+    private val userRepo: UserRepo,
+    private val context: Context
+) {
+
+    companion object {
+        const val CACHED = "CACHED"
+    }
+
+    fun getAllUsers(update: Boolean = false): Flow<List<UserUiModel>> = flow {
+        if (!checkIfCached() || update) {
+            val users = userRepo.getUserListFromApi()
+            userRepo.updateCache(users)
+            markAsCached()
+        }
+
+        emit(userRepo.getUserListFromCache())
+    }
+        .map { list ->
+            list.map { toUiModel(it) }
+        }.flowOn(Dispatchers.IO)
+
+    fun getFriendsListByOuterId(outerId: Long) : Flow<List<UserUiModel>> = flow {
+        emit(userRepo.getUserFriendsByOuterId(outerId))
+    }
+        .map { list ->
+            list.map { toUiModel(it) }
+        }.flowOn(Dispatchers.IO)
+
+
+
+    suspend fun getUserDetails(userId: Long): UserUiModel = withContext(Dispatchers.IO) {
+        val user = userRepo.getUserById(userId)
+        val userFriends = userRepo.getUserFriendsByOuterId(user.outerId).map { toUiModel(it) }
+
+        return@withContext toUiModel(user, userFriends)
+    }
+
+
+    private fun checkIfCached(): Boolean {
+        val sharedPref = context.getSharedPreferences(CACHED, Context.MODE_PRIVATE)
+        return sharedPref.getBoolean(CACHED, false)
+    }
+
+    private fun markAsCached() {
+        val sharedPref = context.getSharedPreferences(CACHED, Context.MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putBoolean(CACHED, true)
+            apply()
+        }
+    }
+
+    private fun toUiModel(user: UserCacheEntity, userFriends: List<UserUiModel> = emptyList()): UserUiModel {
+        val locationConverter = LocationConverter()
+
+        val latitude = locationConverter.latitudeAsDMS(user.latitude, 2)
+        val longitude = locationConverter.longitudeAsDMS(user.longitude, 2)
+
+        return UserUiModel(
+            user.id,
+            user.outerId,
+            user.guid,
+            user.name,
+            user.email,
+            user.isActive,
+            user.age,
+            user.company,
+            user.phone,
+            user.address,
+            user.about,
+            user.eyeColor,
+            user.favoriteFruit,
+            user.registered,
+            userFriends,
+            "$latitude $longitude"
+        )
+    }
+
+}

@@ -2,6 +2,7 @@ package com.example.androidtest.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -13,8 +14,8 @@ import com.example.androidtest.ui.model.UserUiModel
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserListComponent() {
-    val item =  UserUiModel(
-        1, "1", "Test_name", "test@email.com", true,
+    val item = UserUiModel(
+        1, 2, "1", "Test_name", "test@email.com", true,
         23, "Company_name", "+11111",
         "test_address", "about", "blue",
         "apple",
@@ -22,10 +23,11 @@ fun PreviewUserListComponent() {
         emptyList(),
         "Coordinates_22"
     )
-    val list = List(5) {item}
+    val list = List(1) { item }
 
-    UserListComponent(userList = list)
+    UserListComponent(userList = list, modifier = Modifier.fillMaxSize())
 }
+
 
 @Composable
 fun UserListComponent(
@@ -33,19 +35,22 @@ fun UserListComponent(
     userList: List<UserUiModel>,
     onClick: (UserUiModel) -> Unit = {}
 ) {
+
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(4.dp)
     ) {
         items(userList,
-            /*key = {
+            key = {
                 it.id
-            }*/
+            }
         ) {
 
             UserItemComponent(user = it, onClick = { onClick(it) })
 
         }
     }
+
 }
+

@@ -57,6 +57,7 @@ fun ConfigureMainScreen(
 
     NavHost(navController = navController, startDestination = "userList") {
         composable("userList") { navBackStackEntry ->
+
             val vm: UserListScreenViewModel = viewModel {
                 getUserListScreenViewModel(appModule, navBackStackEntry)
             }
@@ -64,21 +65,21 @@ fun ConfigureMainScreen(
             UserListScreen(modifier = modifier, vm = vm, navController = navController)
         }
 
-        composable("userDetailsScreen/{id}",
-            arguments = listOf(navArgument("id") {
+        composable("userDetailsScreen/{userId}",
+            arguments = listOf(navArgument("userId") {
                 type = NavType.LongType
             }
             )) { navBackStackEntry ->
 
             val userId =
-                navController.currentBackStackEntry?.arguments?.getLong("id")
+                navController.currentBackStackEntry?.arguments?.getLong("userId")
 
             userId?.let {
                 val vm: UserDetailsScreenViewModel = viewModel {
                     getUserDetailsScreenViewModel(appModule, navBackStackEntry, userId)
                 }
 
-                UserDetailsScreen(modifier = modifier, vm = vm)
+                UserDetailsScreen(modifier = modifier, vm = vm, navController = navController)
             }
 
         }
@@ -113,7 +114,7 @@ fun getUserDetailsScreenViewModel(
             .build()
 
     return GenericSavedStateViewModelFactory(
-        userDetailsScreenViewModelComponent.getUserDetilsScreenViewModelFactory(),
+        userDetailsScreenViewModelComponent.getUserDetailsScreenViewModelFactory(),
         mapOf("userId" to userId),
         navBackStackEntry
     ).create(UserDetailsScreenViewModel::class.java)

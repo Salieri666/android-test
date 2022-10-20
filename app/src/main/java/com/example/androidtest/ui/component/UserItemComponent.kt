@@ -20,7 +20,7 @@ import com.example.androidtest.ui.model.UserUiModel
 fun PreviewUserItemComponent() {
 
     val item =  UserUiModel(
-        1, "1", "Test_name", "test@email.com", true,
+        1,2, "1", "Test_name", "test@email.com", true,
         23, "Company_name", "+11111",
         "test_address", "about", "blue",
         "apple",

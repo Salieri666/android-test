@@ -22,3 +22,8 @@ sealed class UserListScreenState : Parcelable {
     @Parcelize
     object Default : UserListScreenState()
 }
+
+sealed class UserListScreenAction {
+    object LoadList : UserListScreenAction()
+    object RefreshList : UserListScreenAction()
+}

@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class UserUiModel(
     val id: Long,
+    val outerId: Long,
     val guid: String,
     val name: String,
     val email: String,

@@ -29,7 +29,7 @@ import com.example.androidtest.ui.model.getDrawableByFruit
 fun PreviewUserDetailsComponent() {
 
     val user = UserUiModel(
-        1, "1", "Test_name", "test@email.com", true,
+        1,2, "1", "Test_name", "test@email.com", true,
         23, "Company_name", "+11111",
         "test_address", "about", "blue",
     "apple",
@@ -86,8 +86,9 @@ fun UserDetailsComponent(
         CharacterItem(title = "Company", value = user.company)
         CharacterItem(title = "Email", value = user.email, iconId = R.drawable.ic_email)
         CharacterItem(title = "Phone", value = user.phone, iconId = R.drawable.ic_phone)
-        CharacterItem(title = "Address", value = user.age.toString())
-        CharacterItem(title = "About", value = user.age.toString())
+        CharacterItem(title = "Address", value = user.address)
+        CharacterItem(title = "About", value = user.about)
+        CharacterItem(title = "Registered", value = user.registered)
         CharacterItem(value = "Eye color", iconId = R.drawable.ic_dot,
             tintColor = user.getColorByEye()
         )
