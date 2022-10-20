@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +46,7 @@ fun PreviewUserDetailsComponent() {
 fun UserDetailsComponent(
     modifier: Modifier = Modifier,
     user: UserUiModel,
-    onPnoheClick: (String) -> Unit = {},
+    onPhoneClick: (String) -> Unit = {},
     onEmailClick: (String) -> Unit = {},
     onCoordinatesClick: (Double, Double) -> Unit = {_, _ ->}
 ) {
@@ -57,8 +58,9 @@ fun UserDetailsComponent(
             contentAlignment = Alignment.TopStart,
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(top = 16.dp)
-                .background(MaterialTheme.colorScheme.background)
+
         ) {
             Text(
                 text = user.name, modifier = Modifier
@@ -66,14 +68,15 @@ fun UserDetailsComponent(
                     .padding(start = 16.dp, end = 16.dp),
                 style = TextStyle(
                     fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
 
         Text(
-            text = "Info", modifier = Modifier
-                .paddingFromBaseline(bottom = 12.dp, top = 12.dp)
+            text = stringResource(R.string.info), modifier = Modifier
+                .paddingFromBaseline(bottom = 12.dp, top = 42.dp)
                 .padding(start = 16.dp, end = 16.dp),
             style = TextStyle(
                 fontSize = 20.sp,
@@ -82,18 +85,18 @@ fun UserDetailsComponent(
             color = Color.Blue
         )
 
-        CharacterItem(title = "Age", value = user.age.toString())
-        CharacterItem(title = "Company", value = user.company)
-        CharacterItem(title = "Email", value = user.email, iconId = R.drawable.ic_email, onClick = {onEmailClick(user.email)})
-        CharacterItem(title = "Phone", value = user.phone, iconId = R.drawable.ic_phone, onClick = {onPnoheClick(user.phone)})
-        CharacterItem(title = "Address", value = user.address)
-        CharacterItem(title = "About", value = user.about)
-        CharacterItem(title = "Registered", value = user.registered)
-        CharacterItem(value = "Eye color", iconId = R.drawable.ic_dot,
+        CharacterItem(title = stringResource(R.string.age), value = user.age.toString())
+        CharacterItem(title = stringResource(R.string.company), value = user.company)
+        CharacterItem(title = stringResource(R.string.email), value = user.email, iconId = R.drawable.ic_email, onClick = {onEmailClick(user.email)})
+        CharacterItem(title = stringResource(R.string.phone), value = user.phone, iconId = R.drawable.ic_phone, onClick = {onPhoneClick(user.phone)})
+        CharacterItem(title = stringResource(R.string.address), value = user.address)
+        CharacterItem(title = stringResource(R.string.about), value = user.about)
+        CharacterItem(title = stringResource(R.string.registered), value = user.registered)
+        CharacterItem(value = stringResource(R.string.eye_color), iconId = R.drawable.ic_dot,
             tintColor = user.getColorByEye()
         )
-        CharacterItem(value = "Favorite fruit", iconId = user.getDrawableByFruit())
-        CharacterItem(title = "Coordinates", value = user.coordinates, iconId = R.drawable.gps_pin, onClick = {
+        CharacterItem(value = stringResource(R.string.favorite_fruit), iconId = user.getDrawableByFruit())
+        CharacterItem(title = stringResource(R.string.coordinated), value = user.coordinates, iconId = R.drawable.gps_pin, onClick = {
             onCoordinatesClick(user.latitude, user.longitude)
         })
 
@@ -111,7 +114,7 @@ fun CharacterItem(
 ) {
     Box(modifier = modifier
         .clickable { onClick.invoke() }
-        .background(Color.White)
+        .background(MaterialTheme.colorScheme.background)
     ) {
         Row(
             modifier = modifier
@@ -125,19 +128,21 @@ fun CharacterItem(
                     text = value,
                     style = TextStyle(
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 )
                 Text(
                     text = title, style = TextStyle(
                         fontSize = 12.sp,
-                        fontWeight = FontWeight.Light
+                        fontWeight = FontWeight.Light,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 )
             }
 
             iconId?.let {
-                Icon(imageVector = ImageVector.vectorResource(id = it), tint = tintColor ?: Color.Unspecified, contentDescription = null)
+                Icon(imageVector = ImageVector.vectorResource(id = it), tint = tintColor ?: MaterialTheme.colorScheme.onBackground, contentDescription = null)
             }
         }
 

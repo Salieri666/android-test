@@ -13,24 +13,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.androidtest.R
 import com.example.androidtest.ui.component.MessageComponent
 import com.example.androidtest.ui.component.UserDetailsComponent
 import com.example.androidtest.ui.component.UserItemComponent
 import com.example.androidtest.ui.model.UserUiModel
+import com.example.androidtest.ui.navigation.MainNavigation
 import com.example.androidtest.ui.viewModel.UserDetailsScreenViewModel
 
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewUserListScreen() {
-    val item =  UserUiModel(
-        1, 2,"1", "Test_name", "test@email.com", true,
+    val item = UserUiModel(
+        1, 2, "1", "Test_name", "test@email.com", true,
         23, "Company_name", "+11111",
         "test_address", "about", "blue",
         "apple",
@@ -38,7 +41,7 @@ fun PreviewUserListScreen() {
         emptyList(),
         "Coordinates_22", 0.0, 0.0
     )
-    val list = List(1) {item}
+    val list = List(1) { item }
 
     val user = item.copy(friends = list)
     val state = UserDetailsScreenState.Success(user)
@@ -60,9 +63,9 @@ fun UserDetailsScreen(
         state = state,
         friendsOnClick = { friend ->
             if (friend.isActive) {
-                navController.navigate("userDetailsScreen/${friend.id}")
+                navController.navigate(MainNavigation.UserDetails.pathWithArgs(friend.id))
             } else {
-                Toast.makeText(context, "User is disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.user_is_disabled), Toast.LENGTH_SHORT).show()
             }
         },
         onEmailClick = {
@@ -85,10 +88,10 @@ fun UserDetailsScreen(
     friendsOnClick: (UserUiModel) -> Unit = {},
     onPhoneClick: (String) -> Unit = {},
     onEmailClick: (String) -> Unit = {},
-    onCoordinatesClick: (Double, Double) -> Unit = {_, _ ->}
+    onCoordinatesClick: (Double, Double) -> Unit = { _, _ -> }
 ) {
 
-    when(state) {
+    when (state) {
         is UserDetailsScreenState.Success -> {
             BoxWithConstraints {
 
@@ -96,7 +99,7 @@ fun UserDetailsScreen(
                     item {
                         UserDetailsComponent(
                             user = state.user,
-                            onPnoheClick = onPhoneClick,
+                            onPhoneClick = onPhoneClick,
                             onEmailClick = onEmailClick,
                             onCoordinatesClick = onCoordinatesClick
                         )
@@ -105,7 +108,8 @@ fun UserDetailsScreen(
                     stickyHeader {
                         Box(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.background)
+                                .padding(bottom = 5.dp)
+                                .background(MaterialTheme.colorScheme.tertiary)
                                 .padding(20.dp)
                                 .fillMaxWidth()
 
@@ -114,6 +118,7 @@ fun UserDetailsScreen(
                                 text = "Friends", style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onTertiary
                                 )
                             )
                         }
@@ -138,18 +143,17 @@ fun UserDetailsScreen(
         }
 
         is UserDetailsScreenState.Loading -> {
-            MessageComponent(message = "Loading...", modifier = modifier)
+            MessageComponent(message = stringResource(R.string.loading), modifier = modifier)
         }
 
         is UserDetailsScreenState.Error -> {
-            MessageComponent(message = "Something goes wrong", modifier = modifier)
+            MessageComponent(message = stringResource(R.string.smth_goes_wrong), modifier = modifier)
         }
 
         is UserDetailsScreenState.Default -> {
-            MessageComponent(message = "User List", modifier = modifier)
+            MessageComponent(message = stringResource(R.string.user_list), modifier = modifier)
         }
     }
-
 
 
 }

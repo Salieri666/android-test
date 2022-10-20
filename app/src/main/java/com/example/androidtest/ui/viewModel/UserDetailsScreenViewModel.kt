@@ -4,6 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
+import com.example.androidtest.di.component.DaggerUserDetailsScreenViewModelComponent
+import com.example.androidtest.di.component.UserDetailsScreenViewModelComponent
+import com.example.androidtest.di.module.AppModule
+import com.example.androidtest.di.utils.GenericSavedStateViewModelFactory
 import com.example.androidtest.domain.useCase.UserUseCase
 import com.example.androidtest.domain.utils.IntentActions
 import com.example.androidtest.ui.screen.userDetailsScreen.UserDetailsScreenAction
@@ -61,6 +66,8 @@ class UserDetailsScreenViewModel(
     private fun loadUser(userId: Long) {
         viewModelScope.launch {
             try {
+                setState(UserDetailsScreenState.Loading)
+
                 val userDetails = userListUseCase.getUserDetails(userId)
                 setState(UserDetailsScreenState.Success(userDetails))
             } catch (e: CancellationException) {
@@ -73,4 +80,21 @@ class UserDetailsScreenViewModel(
         }
     }
 
+}
+
+fun getUserDetailsScreenViewModel(
+    appModule: AppModule,
+    navBackStackEntry: NavBackStackEntry,
+    userId: Long
+): UserDetailsScreenViewModel {
+    val userDetailsScreenViewModelComponent: UserDetailsScreenViewModelComponent =
+        DaggerUserDetailsScreenViewModelComponent.builder()
+            .appModule(appModule)
+            .build()
+
+    return GenericSavedStateViewModelFactory(
+        userDetailsScreenViewModelComponent.getUserDetailsScreenViewModelFactory(),
+        mapOf("userId" to userId),
+        navBackStackEntry
+    ).create(UserDetailsScreenViewModel::class.java)
 }

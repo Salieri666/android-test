@@ -3,6 +3,8 @@ package com.example.androidtest.domain.useCase
 import android.content.Context
 import com.example.androidtest.data.repo.UserRepo
 import com.example.androidtest.data.room.entity.UserCacheEntity
+import com.example.androidtest.domain.exception.NetworkConnectionException
+import com.example.androidtest.domain.utils.ConnectHelper
 import com.example.androidtest.domain.utils.LocationConverter
 import com.example.androidtest.ui.model.UserUiModel
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,7 @@ import javax.inject.Singleton
 @Singleton
 class UserUseCase @Inject constructor(
     private val userRepo: UserRepo,
+    private val connectHelper: ConnectHelper,
     private val context: Context
 ) {
 
@@ -29,6 +32,10 @@ class UserUseCase @Inject constructor(
 
     fun getAllUsers(update: Boolean = false): Flow<List<UserUiModel>> = flow {
         if (!checkIfCached() || update) {
+
+            if (!connectHelper.isConnected())
+                throw NetworkConnectionException("Connection problem")
+
             val users = userRepo.getUserListFromApi()
             userRepo.updateCache(users)
             markAsCached()

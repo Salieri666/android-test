@@ -5,17 +5,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.example.androidtest.R
 import com.example.androidtest.ui.component.MessageComponent
 import com.example.androidtest.ui.component.UserListComponent
 import com.example.androidtest.ui.model.UserUiModel
@@ -82,34 +81,60 @@ fun UserListScreen(
     onClick: (UserUiModel) -> Unit = {},
     onFloatClick: () -> Unit = {}
 ) {
+    Scaffold(
+        modifier = modifier,
+        floatingActionButton = {
 
-    when (state) {
-        is UserListScreenState.Success -> {
-            Scaffold(floatingActionButton = {
+            FloatingActionButton(
+                onClick = onFloatClick,
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
+                Icon(
+                    Icons.Filled.Refresh,
+                    stringResource(R.string.refresh),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
 
-                FloatingActionButton(onClick = onFloatClick) {
-                    Icon(Icons.Filled.Refresh, "Refresh")
-                }
+        }) { paddingValues ->
+        when (state) {
+            is UserListScreenState.Success -> {
 
-            }) { paddingValues ->
                 UserListComponent(
-                    modifier = modifier.padding(paddingValues),
+                    modifier = Modifier.padding(paddingValues),
                     userList = state.list,
                     onClick = onClick
                 )
+
             }
-        }
 
-        is UserListScreenState.Loading -> {
-            MessageComponent(message = "Loading...", modifier = modifier)
-        }
+            is UserListScreenState.Loading -> {
+                MessageComponent(
+                    message = stringResource(R.string.loading),
+                    modifier = modifier.fillMaxSize()
+                )
+            }
 
-        is UserListScreenState.Error -> {
-            MessageComponent(message = "Something goes wrong", modifier = modifier)
-        }
+            is UserListScreenState.Error -> {
+                MessageComponent(
+                    message = stringResource(R.string.smth_goes_wrong),
+                    modifier = modifier.fillMaxSize()
+                )
+            }
 
-        is UserListScreenState.Default -> {
-            MessageComponent(message = "User List", modifier = modifier)
+            is UserListScreenState.Default -> {
+                MessageComponent(
+                    message = stringResource(R.string.user_list),
+                    modifier = modifier.fillMaxSize()
+                )
+            }
+
+            is UserListScreenState.ConnectionProblem -> {
+                MessageComponent(
+                    message = stringResource(R.string.connection_problem),
+                    modifier = modifier.fillMaxSize()
+                )
+            }
         }
     }
 }

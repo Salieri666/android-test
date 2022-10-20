@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">AndroidTest</string>
+    <string name="user_details">User details</string>
+    <string name="users">Users</string>
+    <string name="user_is_disabled">User is disabled</string>
+    <string name="action_back">Action back</string>
+    <string name="info">Info</string>
+    <string name="age">Age</string>
+    <string name="company">Company</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="about">About</string>
+    <string name="registered">Registered</string>
+    <string name="eye_color">Eye color</string>
+    <string name="favorite_fruit">Favorite fruit</string>
+    <string name="coordinated">Coordinates</string>
+    <string name="active">active</string>
+    <string name="disable">disable</string>
+    <string name="loading">Loading…</string>
+    <string name="smth_goes_wrong">Something goes wrong</string>
+    <string name="user_list">User List</string>
+    <string name="refresh">Refresh</string>
+    <string name="connection_problem">Connection problem</string>
 </resources>

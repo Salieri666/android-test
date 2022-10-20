@@ -4,6 +4,12 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
+import com.example.androidtest.di.component.DaggerUserListScreenViewModelComponent
+import com.example.androidtest.di.component.UserListScreenViewModelComponent
+import com.example.androidtest.di.module.AppModule
+import com.example.androidtest.di.utils.GenericSavedStateViewModelFactory
+import com.example.androidtest.domain.exception.NetworkConnectionException
 import com.example.androidtest.domain.useCase.UserUseCase
 import com.example.androidtest.ui.screen.userListScreen.UserListScreenAction
 import com.example.androidtest.ui.screen.userListScreen.UserListScreenState
@@ -53,11 +59,31 @@ class UserListScreenViewModel(
                 setState(UserListScreenState.Success(it))
             }
             .catch { cause ->
-                Log.e("ERROR", "Error in UserListScreen", cause)
-                setState(UserListScreenState.Error(cause))
+                if (cause is NetworkConnectionException) {
+                    setState(UserListScreenState.ConnectionProblem)
+                } else {
+                    Log.e("ERROR", "Error in UserListScreen", cause)
+                    setState(UserListScreenState.Error(cause))
+                }
             }
             .launchIn(viewModelScope)
     }
 
 
+}
+
+fun getUserListScreenViewModel(
+    appModule: AppModule,
+    navBackStackEntry: NavBackStackEntry
+): UserListScreenViewModel {
+    val userListScreenComponent: UserListScreenViewModelComponent =
+        DaggerUserListScreenViewModelComponent.builder()
+            .appModule(appModule)
+            .build()
+
+    return GenericSavedStateViewModelFactory(
+        userListScreenComponent.getUserListScreenViewModelFactory(),
+        null,
+        navBackStackEntry
+    ).create(UserListScreenViewModel::class.java)
 }

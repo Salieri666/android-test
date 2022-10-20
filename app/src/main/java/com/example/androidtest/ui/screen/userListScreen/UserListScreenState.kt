@@ -17,6 +17,9 @@ sealed class UserListScreenState : Parcelable {
     ) : UserListScreenState()
 
     @Parcelize
+    object ConnectionProblem : UserListScreenState()
+
+    @Parcelize
     object Loading : UserListScreenState()
 
     @Parcelize
