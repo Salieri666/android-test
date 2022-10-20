@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,14 +40,6 @@ class UserUseCase @Inject constructor(
             list.map { toUiModel(it) }
         }.flowOn(Dispatchers.IO)
 
-    fun getFriendsListByOuterId(outerId: Long) : Flow<List<UserUiModel>> = flow {
-        emit(userRepo.getUserFriendsByOuterId(outerId))
-    }
-        .map { list ->
-            list.map { toUiModel(it) }
-        }.flowOn(Dispatchers.IO)
-
-
 
     suspend fun getUserDetails(userId: Long): UserUiModel = withContext(Dispatchers.IO) {
         val user = userRepo.getUserById(userId)
@@ -52,7 +47,6 @@ class UserUseCase @Inject constructor(
 
         return@withContext toUiModel(user, userFriends)
     }
-
 
     private fun checkIfCached(): Boolean {
         val sharedPref = context.getSharedPreferences(CACHED, Context.MODE_PRIVATE)
@@ -65,6 +59,15 @@ class UserUseCase @Inject constructor(
             putBoolean(CACHED, true)
             apply()
         }
+    }
+
+    private fun convertDate(date: String): String {
+        val formatterFrom = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss ZZZZZ")
+
+        val currentLocale: Locale = context.resources.configuration.locales[0]
+        val dateTime = ZonedDateTime.parse(date, formatterFrom)
+        val formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yy", currentLocale)
+        return dateTime.format(formatter)
     }
 
     private fun toUiModel(user: UserCacheEntity, userFriends: List<UserUiModel> = emptyList()): UserUiModel {
@@ -87,9 +90,11 @@ class UserUseCase @Inject constructor(
             user.about,
             user.eyeColor,
             user.favoriteFruit,
-            user.registered,
+            convertDate(user.registered),
             userFriends,
-            "$latitude $longitude"
+            "$latitude $longitude",
+            user.latitude,
+            user.longitude
         )
     }
 

@@ -5,6 +5,7 @@ import com.example.androidtest.di.module.DatabaseModule
 import com.example.androidtest.di.module.NetworkModule
 import com.example.androidtest.di.utils.ViewModelAssistedFactory
 import com.example.androidtest.domain.useCase.UserUseCase
+import com.example.androidtest.domain.utils.IntentActions
 import com.example.androidtest.ui.viewModel.UserDetailsScreenViewModel
 import dagger.Component
 import javax.inject.Inject
@@ -18,9 +19,10 @@ interface UserDetailsScreenViewModelComponent {
 }
 
 class UserDetailsScreenViewModelFactory @Inject constructor(
-    private val userListUseCase: UserUseCase
+    private val userListUseCase: UserUseCase,
+    private val intentActions: IntentActions
 ) : ViewModelAssistedFactory<UserDetailsScreenViewModel> {
     override fun create(handle: SavedStateHandle, params: Map<String, Any>?): UserDetailsScreenViewModel {
-        return UserDetailsScreenViewModel(userListUseCase, handle, params?.get("userId") as Long?)
+        return UserDetailsScreenViewModel(userListUseCase, handle, params?.get("userId") as Long?, intentActions)
     }
 }

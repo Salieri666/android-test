@@ -22,7 +22,9 @@ data class UserUiModel(
     val favoriteFruit: String,
     val registered: String,
     val friends: List<UserUiModel>,
-    val coordinates: String
+    val coordinates: String,
+    val latitude: Double,
+    val longitude: Double
 ) : Parcelable
 
 fun UserUiModel.getColorByEye(): Color {

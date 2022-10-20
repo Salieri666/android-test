@@ -35,7 +35,7 @@ fun PreviewUserDetailsComponent() {
     "apple",
         "2022",
         emptyList(),
-        "Coordinates_22"
+        "Coordinates_22", 0.0, 0.0
     )
 
     UserDetailsComponent(user = user, modifier = Modifier.fillMaxSize())
@@ -45,9 +45,9 @@ fun PreviewUserDetailsComponent() {
 fun UserDetailsComponent(
     modifier: Modifier = Modifier,
     user: UserUiModel,
-    onPnoheClick: () -> Unit = {},
-    onEmailClick: () -> Unit = {},
-    onCoordinatesClick: () -> Unit = {}
+    onPnoheClick: (String) -> Unit = {},
+    onEmailClick: (String) -> Unit = {},
+    onCoordinatesClick: (Double, Double) -> Unit = {_, _ ->}
 ) {
     Column(
         modifier = modifier
@@ -84,8 +84,8 @@ fun UserDetailsComponent(
 
         CharacterItem(title = "Age", value = user.age.toString())
         CharacterItem(title = "Company", value = user.company)
-        CharacterItem(title = "Email", value = user.email, iconId = R.drawable.ic_email)
-        CharacterItem(title = "Phone", value = user.phone, iconId = R.drawable.ic_phone)
+        CharacterItem(title = "Email", value = user.email, iconId = R.drawable.ic_email, onClick = {onEmailClick(user.email)})
+        CharacterItem(title = "Phone", value = user.phone, iconId = R.drawable.ic_phone, onClick = {onPnoheClick(user.phone)})
         CharacterItem(title = "Address", value = user.address)
         CharacterItem(title = "About", value = user.about)
         CharacterItem(title = "Registered", value = user.registered)
@@ -93,7 +93,9 @@ fun UserDetailsComponent(
             tintColor = user.getColorByEye()
         )
         CharacterItem(value = "Favorite fruit", iconId = user.getDrawableByFruit())
-        CharacterItem(title = "Coordinates", value = user.coordinates, iconId = R.drawable.gps_pin)
+        CharacterItem(title = "Coordinates", value = user.coordinates, iconId = R.drawable.gps_pin, onClick = {
+            onCoordinatesClick(user.latitude, user.longitude)
+        })
 
     }
 }

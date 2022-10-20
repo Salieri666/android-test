@@ -26,7 +26,7 @@ fun PreviewUserItemComponent() {
         "apple",
         "2022",
         emptyList(),
-        "Coordinates_22"
+        "Coordinates_22", 0.0,0.0
     )
 
     UserItemComponent(user = item)

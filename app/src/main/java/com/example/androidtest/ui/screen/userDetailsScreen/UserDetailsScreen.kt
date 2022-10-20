@@ -36,7 +36,7 @@ fun PreviewUserListScreen() {
         "apple",
         "2022",
         emptyList(),
-        "Coordinates_22"
+        "Coordinates_22", 0.0, 0.0
     )
     val list = List(1) {item}
 
@@ -55,13 +55,26 @@ fun UserDetailsScreen(
     val state by vm.state.collectAsState()
     val context = LocalContext.current
 
-    UserDetailsScreen(modifier = modifier, state = state, friendsOnClick = { friend ->
-        if (friend.isActive) {
-            navController.navigate("userDetailsScreen/${friend.id}")
-        } else {
-            Toast.makeText(context, "User is disabled", Toast.LENGTH_SHORT).show()
+    UserDetailsScreen(
+        modifier = modifier,
+        state = state,
+        friendsOnClick = { friend ->
+            if (friend.isActive) {
+                navController.navigate("userDetailsScreen/${friend.id}")
+            } else {
+                Toast.makeText(context, "User is disabled", Toast.LENGTH_SHORT).show()
+            }
+        },
+        onEmailClick = {
+            vm.setAction(UserDetailsScreenAction.OpenEmail(it))
+        },
+        onPhoneClick = {
+            vm.setAction(UserDetailsScreenAction.OpenPhone(it))
+        },
+        onCoordinatesClick = { latitude, longitude ->
+            vm.setAction(UserDetailsScreenAction.OpenMap(latitude, longitude))
         }
-    })
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -69,7 +82,10 @@ fun UserDetailsScreen(
 fun UserDetailsScreen(
     modifier: Modifier = Modifier,
     state: UserDetailsScreenState,
-    friendsOnClick: (UserUiModel) -> Unit = {}
+    friendsOnClick: (UserUiModel) -> Unit = {},
+    onPhoneClick: (String) -> Unit = {},
+    onEmailClick: (String) -> Unit = {},
+    onCoordinatesClick: (Double, Double) -> Unit = {_, _ ->}
 ) {
 
     when(state) {
@@ -78,7 +94,12 @@ fun UserDetailsScreen(
 
                 LazyColumn(modifier = modifier) {
                     item {
-                        UserDetailsComponent(user = state.user)
+                        UserDetailsComponent(
+                            user = state.user,
+                            onPnoheClick = onPhoneClick,
+                            onEmailClick = onEmailClick,
+                            onCoordinatesClick = onCoordinatesClick
+                        )
                     }
 
                     stickyHeader {

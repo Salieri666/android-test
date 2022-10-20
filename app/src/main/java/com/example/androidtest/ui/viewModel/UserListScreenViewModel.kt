@@ -1,5 +1,6 @@
 package com.example.androidtest.ui.viewModel
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -52,6 +53,7 @@ class UserListScreenViewModel(
                 setState(UserListScreenState.Success(it))
             }
             .catch { cause ->
+                Log.e("ERROR", "Error in UserListScreen", cause)
                 setState(UserListScreenState.Error(cause))
             }
             .launchIn(viewModelScope)

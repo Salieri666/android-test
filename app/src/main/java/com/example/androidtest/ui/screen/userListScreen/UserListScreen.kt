@@ -32,7 +32,7 @@ fun PreviewUserListScreen() {
         "apple",
         "2022",
         emptyList(),
-        "Coordinates_22"
+        "Coordinates_22", 0.0, 0.0
     )
     val list = List(1) { item }
     val state = UserListScreenState.Success(list)

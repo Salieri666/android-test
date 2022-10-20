@@ -23,7 +23,3 @@ sealed class UserListScreenState : Parcelable {
     object Default : UserListScreenState()
 }
 
-sealed class UserListScreenAction {
-    object LoadList : UserListScreenAction()
-    object RefreshList : UserListScreenAction()
-}
