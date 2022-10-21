@@ -1,6 +1,5 @@
 package com.example.androidtest.di.module
 
-import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
@@ -8,14 +7,9 @@ import javax.inject.Singleton
 
 
 @Module
-class AppModule(private val application: Application) {
+class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun providesApplication(): Application = application
-
-
-    @Provides
-    @Singleton
-    fun providesApplicationContext(): Context = application
+    fun providesApplicationContext(): Context = context
 }

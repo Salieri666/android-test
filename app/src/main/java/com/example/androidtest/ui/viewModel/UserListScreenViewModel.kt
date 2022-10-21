@@ -1,5 +1,6 @@
 package com.example.androidtest.ui.viewModel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -73,12 +74,12 @@ class UserListScreenViewModel(
 }
 
 fun getUserListScreenViewModel(
-    appModule: AppModule,
+    context: Context,
     navBackStackEntry: NavBackStackEntry
 ): UserListScreenViewModel {
     val userListScreenComponent: UserListScreenViewModelComponent =
         DaggerUserListScreenViewModelComponent.builder()
-            .appModule(appModule)
+            .appModule(AppModule(context))
             .build()
 
     return GenericSavedStateViewModelFactory(

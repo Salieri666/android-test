@@ -12,13 +12,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.androidtest.di.module.AppModule
 import com.example.androidtest.ui.component.TopBarComponent
 import com.example.androidtest.ui.model.TopBarModel
 import com.example.androidtest.ui.navigation.MainNavigation
@@ -32,11 +33,11 @@ import com.example.androidtest.ui.viewModel.getUserListScreenViewModel
 
 class MainActivity : ComponentActivity() {
 
-    lateinit var appModule: AppModule
+    //lateinit var appModule: AppModule
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        appModule = (application as App).appModule
+        //appModule = (application as App).appModule
 
         setContent {
             AndroidTestTheme {
@@ -44,18 +45,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ConfigureMainScreen(modifier = Modifier.fillMaxSize(), appModule)
+                    ConfigureMainScreen(modifier = Modifier.fillMaxSize())
                 }
             }
         }
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfigureMainScreen(
-    modifier: Modifier = Modifier,
-    appModule: AppModule
+    modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
     val topBarModel = rememberSaveable {
@@ -72,7 +73,6 @@ fun ConfigureMainScreen(
         ConfigureNavHost(
             modifier = Modifier.padding(paddingValues),
             navController,
-            appModule,
             topBarModel
         )
 
@@ -85,16 +85,17 @@ fun ConfigureMainScreen(
 fun ConfigureNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    appModule: AppModule,
     topBarModel: MutableState<TopBarModel>
 ) {
+    val context = LocalContext.current
+
     NavHost(navController = navController, startDestination = MainNavigation.UserList.path) {
         composable(MainNavigation.UserList.path) { navBackStackEntry ->
 
             topBarModel.value = TopBarModel(stringResource(R.string.users), false)
 
             val vm: UserListScreenViewModel = viewModel {
-                getUserListScreenViewModel(appModule, navBackStackEntry)
+                getUserListScreenViewModel(context, navBackStackEntry)
             }
 
             UserListScreen(modifier = modifier, vm = vm, navController = navController)
@@ -113,7 +114,7 @@ fun ConfigureNavHost(
 
             userId?.let {
                 val vm: UserDetailsScreenViewModel = viewModel {
-                    getUserDetailsScreenViewModel(appModule, navBackStackEntry, userId)
+                    getUserDetailsScreenViewModel(context, navBackStackEntry, userId)
                 }
 
                 UserDetailsScreen(modifier = modifier, vm = vm, navController = navController)
@@ -121,4 +122,10 @@ fun ConfigureNavHost(
 
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewConfigureMainScreen() {
+    ConfigureMainScreen()
 }
