@@ -28,10 +28,6 @@ class UserUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    companion object {
-        const val CACHED = "CACHED"
-    }
-
     fun getAllUsers(update: Boolean = false): Flow<List<UserUiModel>> = flow {
         if (!checkIfCached() || update) {
 
@@ -105,6 +101,11 @@ class UserUseCase @Inject constructor(
             user.latitude,
             user.longitude
         )
+    }
+
+
+    companion object {
+        const val CACHED = "CACHED"
     }
 
 }

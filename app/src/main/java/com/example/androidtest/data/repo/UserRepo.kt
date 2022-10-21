@@ -22,7 +22,7 @@ class UserRepo @Inject constructor(
 ) {
 
     suspend fun getUserListFromApi() : List<UserBody> = withContext(ioDispatcher) {
-        return@withContext userApi.getUsers(alt = "media", token = "e3672c23-b1a5-4ca7-bb77-b6580d75810c")
+        return@withContext userApi.getUsers(alt = alt, token = token)
     }
 
     suspend fun getUserListFromCache() : List<UserCacheEntity> = withContext(ioDispatcher) {
@@ -79,5 +79,10 @@ class UserRepo @Inject constructor(
             user.longitude,
             user.favoriteFruit
         )
+    }
+
+    companion object {
+        const val alt = "media"
+        const val token = "e3672c23-b1a5-4ca7-bb77-b6580d75810c"
     }
 }

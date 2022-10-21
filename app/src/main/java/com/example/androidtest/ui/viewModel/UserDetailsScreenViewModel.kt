@@ -12,6 +12,7 @@ import com.example.androidtest.di.module.AppModule
 import com.example.androidtest.di.utils.GenericSavedStateViewModelFactory
 import com.example.androidtest.domain.useCase.UserUseCase
 import com.example.androidtest.domain.utils.IntentActions
+import com.example.androidtest.ui.navigation.MainNavigation
 import com.example.androidtest.ui.screen.userDetailsScreen.UserDetailsScreenAction
 import com.example.androidtest.ui.screen.userDetailsScreen.UserDetailsScreenState
 import kotlinx.coroutines.CancellationException
@@ -95,7 +96,7 @@ fun getUserDetailsScreenViewModel(
 
     return GenericSavedStateViewModelFactory(
         userDetailsScreenViewModelComponent.getUserDetailsScreenViewModelFactory(),
-        mapOf("userId" to userId),
+        mapOf(MainNavigation.UserDetails.arg to userId),
         navBackStackEntry
     ).create(UserDetailsScreenViewModel::class.java)
 }

@@ -33,11 +33,8 @@ import com.example.androidtest.ui.viewModel.getUserListScreenViewModel
 
 class MainActivity : ComponentActivity() {
 
-    //lateinit var appModule: AppModule
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //appModule = (application as App).appModule
 
         setContent {
             AndroidTestTheme {

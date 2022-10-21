@@ -86,8 +86,7 @@ fun UserListScreen(
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
-
-        }) { paddingValues ->
+    }) { paddingValues ->
         when (state) {
             is UserListScreenState.Success -> {
 
